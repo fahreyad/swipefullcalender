@@ -27,4 +27,5 @@ Steps:
 2. Declare Calendar Html in the Body Section
 3. Install Full Calendar And Hammer Js together
 4. Output in browser that should Swipe Left and Right
+
 find it https://jsfiddle.net/Fahreyad/w4cab9m6/1/
