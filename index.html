@@ -1,0 +1,74 @@
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.7.0/fullcalendar.min.css">
+</head>
+
+<body>
+    <div id='calendar'></div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.3/moment.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.7.0/fullcalendar.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+
+            (function (factory) {
+                if (typeof define === 'function' && define.amd) {
+                    define(['jquery', 'hammerjs'], factory);
+                } else if (typeof exports === 'object') {
+                    factory(require('jquery'), require('hammerjs'));
+                } else {
+                    factory(jQuery, Hammer);
+                }
+            }(function ($, Hammer) {
+                function hammerify(el, options) {
+                    var $el = $(el);
+                    if (!$el.data("hammer")) {
+                        $el.data("hammer", new Hammer($el[0], options));
+                    }
+                }
+                $.fn.hammer = function (options) {
+                    return this.each(function () {
+                        hammerify(this, options);
+                    });
+                };
+
+                // extend the emit method to also trigger jQuery events
+                Hammer.Manager.prototype.emit = (function (originalEmit) {
+                    return function (type, data) {
+                        originalEmit.call(this, type, data);
+                        $(this.element).trigger({
+                            type: type,
+                            gesture: data
+                        });
+                    };
+                })(Hammer.Manager.prototype.emit);
+            }));
+
+            $(document).ready(function () {
+
+                // page is now ready, initialize the calendar...
+                var calendar = $('#calendar');
+                calendar.fullCalendar();
+                //Hammer Js swipe
+                calendar.hammer().on("swipeleft", function (event) {
+                    calendar.fullCalendar('next');
+                });
+                calendar.hammer().on("swiperight", function (event) {
+                    calendar.fullCalendar('prev');
+                });
+            });
+
+        }
+    </script>
+
+</body>
+
+</html>
